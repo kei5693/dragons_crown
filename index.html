@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+	<title>Document</title>
+	<style>
+		/* TYPE, COMMON */
+		body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,p,button,input{margin:0;padding:0}
+		body,h1,h2,h3,h4,h5,h6,input,textarea,select,option{color:#000; font-family:'돋움',dotum,helvetica,sans-serif; font-size:12px;line-height:1.4;}
+		img,fieldset,iframe{border:0}
+		ul, ol {list-style:none}
+		img,a,input,select,button{vertical-align:top}
+		em,address,dfn,cite{font-style:normal}
+
+		a{color:#000;text-decoration:none}
+		a:hover{color:#000;text-decoration:none}
+		label,button{cursor:pointer}
+
+		/* FORM */
+		legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
+
+		/* TABLE */
+		table{border-spacing:0;border-collapse:collapse;width:100%;}
+		table,th,td{color:#000;font-family:'돋움',dotum,helvetica,sans-serif; font-size:12px;}
+		caption{width:0; height:0; font-size:0; line-height:0; overflow:hidden; visibility:hidden;}
+
+		#btnFloor {
+			position: fixed;
+			top: 0;
+			left: 0;
+			display: block;
+			width: 100%;
+			height: 50px;
+			font-size: 20px;
+			font-weight: 700;
+		}
+		#floorTable {margin-top: 60px;border-top: 1px solid #000;}
+		#floorTable > li {display: flex;align-items: center;}
+		#floorTable > li {text-align: center; padding: 5px 0; border: 1px solid #000; border-top: 0 none;}
+		#floorTable > li h2 {width: 40px;}
+		#floorTable > li strong {flex: 1;text-align: left;padding-left: 10px;}
+		#floorTable > li strong span {font-weight: 400;}
+		#floorTable > li em {width: 40px;}
+		#floorTable > li .camp {width: 30px;}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<button type="button" id="btnFloor">floor</button>
+		<ol id="floorTable"></ol>
+	</div>
+
+
+	<script>
+		// 보스 테이블 목록
+		let floorArr = [
+			{boss: '와이번', type: '용족', weak: '빙'},
+			{boss: '키마이라', type: '마물', weak: '-'},
+			{boss: '워록', type: '인간', weak: '-'},
+			{boss: '메두사', type: '마물', weak: '-'},
+			{boss: '둠 비틀', type: '자연', weak: '염'},
+			{boss: '하피', type: '마물', weak: '뇌'},
+			{boss: '게이저', type: '마물', weak: '염빙뇌'},
+			{boss: '해적', type: '인간', weak: '뇌'},
+			{boss: '뱀파이어', type: '인간', weak: '뇌'},
+			{boss: '사이클롭스', type: '인간', weak: '-'},
+			{boss: '킬러 래빗', type: '자연', weak: '염'},
+			{boss: '미노타우로스', type: '인간', weak: '뇌'},
+			{boss: '둠 비틀', type: '자연', weak: '염'},
+			{boss: '게이저', type: '마물', weak: '염빙뇌'},
+			{boss: '사이클롭스', type: '인간', weak: '-'},
+			{boss: '해적', type: '인간', weak: '뇌'},
+			{boss: '레이스', type: '사령', weak: '빙'},
+			{boss: '레이스', type: '사령', weak: '빙'},
+			{boss: '크라켄', type: '자연', weak: '뇌'},
+			{boss: '아크 데몬', type: '마물', weak: '-'},
+			{boss: '킬러 래빗', type: '자연', weak: '염'},
+			{boss: '아크 데몬', type: '마물', weak: '-'},
+			{boss: '해적', type: '인간', weak: '뇌'},
+			{boss: '골렘', type: '물질', weak: '-'},
+			{boss: '하피', type: '마물', weak: '뇌'},
+			{boss: '아크 데몬', type: '마물', weak: '-'},
+			{boss: '둠 비틀', type: '자연', weak: '염'},
+			{boss: '와이번', type: '용족', weak: '빙'},
+			{boss: '키마이라', type: '마물', weak: '-'},
+			{boss: '워록', type: '인간', weak: '-'},
+			{boss: '뱀파이어', type: '인간', weak: '뇌'},
+			{boss: '킬러 래빗', type: '자연', weak: '염'},
+			{boss: '미노타우로스', type: '인간', weak: '뇌'},
+			{boss: '해적', type: '인간', weak: '뇌'},
+			{boss: '레드 드래곤', type: '용족', weak: '빙'},
+			{boss: '와이번', type: '용족', weak: '빙'},
+			{boss: '와이번', type: '용족', weak: '빙'},
+			{boss: '뱀파이어', type: '인간', weak: '뇌'},
+			{boss: '키마이라', type: '마물', weak: '-'},
+			{boss: '사이클롭스', type: '인간', weak: '-'},
+			{boss: '워록', type: '인간', weak: '-'},
+			{boss: '둠 비틀', type: '자연', weak: '염'},
+			{boss: '크라켄', type: '자연', weak: '뇌'},
+			{boss: '레이스', type: '사령', weak: '빙'},
+			{boss: '해적', type: '인간', weak: '뇌'},
+			{boss: '하피', type: '마물', weak: '뇌'},
+			{boss: '게이저', type: '마물', weak: '염빙뇌'},
+			{boss: '메두사', type: '마물', weak: '-'},
+			{boss: '레드 드래곤', type: '용족', weak: '빙'},
+			{boss: '레이스', type: '사령', weak: '빙'},
+			{boss: '와이번', type: '용족', weak: '빙'},
+			{boss: '골렘', type: '물질', weak: '-'},
+			{boss: '가고일 게이트', type: '물질', weak: '-'},
+			{boss: '게이저', type: '마물', weak: '염빙뇌'},
+			{boss: '메두사', type: '마물', weak: '-'},
+			{boss: '골렘', type: '물질', weak: '-'},
+			{boss: '레드 드래곤', type: '용족', weak: '빙'},
+			{boss: '골렘', type: '물질', weak: '-'},
+			{boss: '사이클롭스', type: '인간', weak: '-'},
+			{boss: '레드 드래곤', type: '용족', weak: '빙'},
+			{boss: '해적', type: '인간', weak: '뇌'},
+			{boss: '킬러 래빗', type: '자연', weak: '염'},
+			{boss: '미노타우로스', type: '인간', weak: '뇌'},
+			{boss: '키마이라', type: '마물', weak: '-'},
+			{boss: '가고일 게이트', type: '물질', weak: '-'},
+			{boss: '사이클롭스', type: '인간', weak: '-'},
+			{boss: '워록', type: '인간', weak: '-'},
+			{boss: '골렘', type: '물질', weak: '-'},
+			{boss: '와이번', type: '용족', weak: '빙'},
+			{boss: '게이저', type: '마물', weak: '염빙뇌'},
+			{boss: '크라켄', type: '자연', weak: '뇌'},
+			{boss: '키마이라', type: '마물', weak: '-'},
+			{boss: '아크 데몬', type: '마물', weak: '-'},
+			{boss: '둠 비틀', type: '자연', weak: '염'},
+			{boss: '가고일 게이트', type: '물질', weak: '-'},
+			{boss: '가고일 게이트', type: '물질', weak: '-'},
+			{boss: '하피', type: '마물', weak: '뇌'},
+			{boss: '뱀파이어', type: '인간', weak: '뇌'},
+			{boss: '미노타우로스', type: '인간', weak: '뇌'},
+			{boss: '뱀파이어', type: '인간', weak: '뇌'},
+			{boss: '메두사', type: '마물', weak: '-'},
+			{boss: '뱀파이어', type: '인간', weak: '뇌'},
+			{boss: '레드 드래곤', type: '용족', weak: '빙'},
+			{boss: '메두사', type: '마물', weak: '-'},
+			{boss: '레이스', type: '사령', weak: '빙'},
+			{boss: '하피', type: '마물', weak: '뇌'},
+			{boss: '워록', type: '인간', weak: '-'},
+			{boss: '레이스', type: '사령', weak: '빙'},
+			{boss: '아크 데몬', type: '마물', weak: '-'},
+			{boss: '미노타우로스', type: '인간', weak: '뇌'},
+			{boss: '크라켄', type: '자연', weak: '뇌'},
+			{boss: '골렘', type: '물질', weak: '-'},
+			{boss: '레드 드래곤', type: '용족', weak: '빙'},
+			{boss: '게이저', type: '마물', weak: '염빙뇌'},
+			{boss: '킬러 래빗', type: '자연', weak: '염'},
+			{boss: '가고일 게이트', type: '물질', weak: '-'},
+			{boss: '크라켄', type: '자연', weak: '뇌'},
+			{boss: '킬러 래빗', type: '자연', weak: '염'},
+			{boss: '크라켄', type: '자연', weak: '뇌'},
+			{boss: '아크 데몬', type: '마물', weak: '-'},
+		];
+		let boss = ['데몬로드', '에이션트 드래곤'];
+		let startFloor = '';
+		let fixedFloor = 0;
+		let floorTable = document.querySelector('#floorTable');
+		let btnFloor = document.querySelector('#btnFloor');
+		let html = '';
+
+		// 테이블 생성을 위한 층수를 입력 받음
+		function setTable(){
+			startFloor = prompt("층수를 입력");
+			fixedFloor = Number(startFloor.slice(0, startFloor.length - 2) + '0'.repeat(2));
+	
+			initTable(startFloor, fixedFloor);
+		}
+		// 입력값으로 테이블 생성
+		btnFloor.addEventListener('click', ()=>{
+			setTable();
+		});
+		
+		setTable();
+
+		function initTable(startFloor, fixedFloor){	
+			// 입력값이 없으면 1부터 테이블 생성
+			if(startFloor == ''){ startFloor = 1}
+			// 입력값 뒷자리가 0이 아니면 0으로 (캠프 위치 계산에 필요)
+			if(startFloor[startFloor.length-1] == 0 && startFloor[startFloor.length-2] == 0){
+				startFloor = Number(startFloor) + 1;
+			}
+
+			let count = 0;
+
+			floorArr.forEach((el, index) => {
+				let bossFloor = '';
+				// 층수
+				let calcFloor = Number(index+1+fixedFloor);
+				// 층수 - 입력 층수
+				let caclCampFloor = calcFloor - startFloor;
+
+				// 9의 배수이면서 홀짝에 따른 보스 네임 세팅
+				calcFloor % 9 == 0 ? bossFloor = isOdd(calcFloor) : bossFloor = '';
+
+				if(caclCampFloor >= 0){
+					// 캠프는 3판 클리어 할 때마다 등장
+					count++;
+					count % 3 == 0 ? el.camp = '캠프' : el.camp = '';
+					html += `<li>
+						<h2>${calcFloor}</h2>
+						<strong>${el.boss} <span>(${el.type},${el.weak})</span></strong>
+						<p>${bossFloor}</p>
+						<em>${startFloor}</em>
+						<span class="camp">${el.camp}</span>
+					</li>`;
+				}
+			});
+			floorTable.innerHTML = html;
+			html = '';
+		}
+
+		// 홀짝 구분
+		function isOdd(num){
+			if(num % 2 == 1) return boss[0];
+			if(num % 2 == 0) return boss[1];
+		}
+	</script>
+</body>
+</html>
