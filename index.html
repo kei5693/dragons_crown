@@ -173,9 +173,14 @@
 
 		// 테이블 생성을 위한 층수를 입력 받음
 		function setTable(){
-			startFloor = prompt("층수를 입력");
+			if(localStorage.getItem("floor") == null){
+				startFloor = prompt("층수를 입력");
+			} else {
+				startFloor = localStorage.getItem("floor");
+			}
 			fixedFloor = Number(startFloor.slice(0, startFloor.length - 2) + '0'.repeat(2));
 	
+			setFloor(startFloor);
 			initTable(startFloor, fixedFloor);
 		}
 		// 입력값으로 테이블 생성
@@ -186,40 +191,47 @@
 		setTable();
 
 		function initTable(startFloor, fixedFloor){	
-			// 입력값이 없으면 1부터 테이블 생성
-			if(startFloor == ''){ startFloor = 1}
-			// 입력값 뒷자리가 0이 아니면 0으로 (캠프 위치 계산에 필요)
-			if(startFloor[startFloor.length-1] == 0 && startFloor[startFloor.length-2] == 0){
-				startFloor = Number(startFloor) + 1;
-			}
+			let counter = 0;
+			while (counter < 2) {
 
-			let count = 0;
-			let activeClass = '';
-
-			floorArr.forEach((el, index) => {
-				let bossFloor = '';
-				// 층수
-				let calcFloor = Number(index+1+fixedFloor);
-				// 층수 - 입력 층수
-				let caclCampFloor = calcFloor - startFloor;
-
-				// 9의 배수이면서 홀짝에 따른 보스 네임 세팅
-				calcFloor % 9 == 0 ? bossFloor = isOdd(calcFloor) : bossFloor = '';
-				activeClass = calcFloor % 9 == 0 ? 'active' : '';
-
-				if(caclCampFloor >= 0){
-					// 캠프는 3판 클리어 할 때마다 등장
-					count++;
-					count % 3 == 0 ? el.camp = '캠프' : el.camp = '';
-					html += `<li class="${activeClass}">
-						<h2>${calcFloor}</h2>
-						<strong>${el.boss} <span>(${el.type},${el.weak})</span></strong>
-						<p>${bossFloor}</p>
-						<em>${startFloor}</em>
-						<span class="camp">${el.camp}</span>
-					</li>`;
+				// 입력값이 없으면 1부터 테이블 생성
+				if(startFloor == ''){ startFloor = 1}
+				// 입력값 뒷자리가 0이 아니면 0으로 (캠프 위치 계산에 필요)
+				if(startFloor[startFloor.length-1] == 0 && startFloor[startFloor.length-2] == 0){
+					startFloor = Number(startFloor) + 1;
 				}
-			});
+	
+				let count = 0;
+				let activeClass = '';
+	
+				floorArr.forEach((el, index) => {
+					let bossFloor = '';
+					// 층수
+					let calcFloor = Number(index+1+fixedFloor) + Number(counter * 100);
+					// 층수 - 입력 층수
+					let caclCampFloor = calcFloor - startFloor;
+	
+					// 9의 배수이면서 홀짝에 따른 보스 네임 세팅
+					calcFloor % 9 == 0 ? bossFloor = isOdd(calcFloor) : bossFloor = '';
+					activeClass = calcFloor % 9 == 0 ? 'active' : '';
+	
+					if(caclCampFloor >= 0){
+						// 캠프는 3판 클리어 할 때마다 등장
+						count++;
+						count % 3 == 0 ? el.camp = '캠프' : el.camp = '';
+						html += `<li class="${activeClass}">
+							<h2>${calcFloor}</h2>
+							<strong>${el.boss} <span>(${el.type},${el.weak})</span></strong>
+							<p>${bossFloor}</p>
+							<em>${startFloor}</em>
+							<span class="camp">${el.camp}</span>
+						</li>`;
+					}
+				});
+
+				counter++;
+			}
+			
 			floorTable.innerHTML = html;
 			html = '';
 		}
@@ -228,6 +240,10 @@
 		function isOdd(num){
 			if(num % 2 == 1) return boss[0];
 			if(num % 2 == 0) return boss[1];
+		}
+	
+		function setFloor(number){
+			localStorage.setItem("floor", number);
 		}
 	</script>
 </body>
