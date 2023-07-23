@@ -27,13 +27,17 @@
 		caption{width:0; height:0; font-size:0; line-height:0; overflow:hidden; visibility:hidden;}
 
 		#wrap {padding-top: 60px;}
-		#btnFloor {
+		#wrap > div {
 			position: fixed;
 			top: 0;
 			left: 0;
-			display: block;
 			width: 100%;
 			height: 50px;
+
+			display: flex;
+		}
+		#wrap > div button {
+			flex: 1;
 			font-size: 20px;
 			font-weight: 700;
 		}
@@ -48,14 +52,17 @@
 
 		@media (min-width: 768px) {
 			#wrap {max-width: 400px;margin: 0 auto;}
-			#btnFloor{max-width: 400px;left: 50%; transform: translateX(-50%);}
+			#wrap > div {max-width: 400px;left: 50%; transform: translateX(-50%);}
 			#floorTable > li {padding: 10px 0;}
 		}
 	</style>
 </head>
 <body>
 	<div id="wrap">
-		<button type="button" id="btnFloor">floor</button>
+		<div>
+			<button type="button" id="btnFloor">floor</button>
+			<button type="button" id="btnReset">reset</button>
+		</div>
 		<ol id="floorTable"></ol>
 	</div>
 
@@ -169,6 +176,7 @@
 		let fixedFloor = 0;
 		let floorTable = document.querySelector('#floorTable');
 		let btnFloor = document.querySelector('#btnFloor');
+		let btnReset = document.querySelector('#btnReset');
 		let html = '';
 
 		// 테이블 생성을 위한 층수를 입력 받음
@@ -186,6 +194,10 @@
 		// 입력값으로 테이블 생성
 		btnFloor.addEventListener('click', ()=>{
 			setTable();
+		});
+
+		btnReset.addEventListener('click', ()=>{
+			localStorage.removeItem("floor");
 		});
 		
 		setTable();
